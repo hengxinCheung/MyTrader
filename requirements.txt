@@ -1,0 +1,2 @@
+jqdatasdk
+PyQt5

@@ -2,12 +2,12 @@ import sys
 from ply import yacc
 from ply.lex import LexToken
 from ply.yacc import YaccProduction, LRParser
-from mytrader.mylang.constants import tokens
+from mytrader.mylang.constants import tokens, system_variable
 from mytrader.mylang.lex import create_lexer
 from mytrader.mylang import builtins
 from mytrader.mylang.expression import Unary, Number, String, Bool, Arithmetic, Relation, Logical, Variable, Function
 from mytrader.mylang.statement import NormalStatement, AssignStatement, ConditionalStatement, IfStatement
-from mytrader.mylang.error import UndefineError, GrammarError, ArgumentError
+from mytrader.mylang.error import ParseError, UndefineError, GrammarError, ArgumentError
 
 # define the precedence of operator
 precedence = (
@@ -42,6 +42,9 @@ def p_statement_conditional(p: YaccProduction):
 
 def p_statement_assign(p: YaccProduction):
     """statement : ID ASSIGN expr SEMI"""
+    # judge whether id is same as system variables
+    if p[1] in system_variable:
+        raise ParseError(p[1], p.lineno(1), p.lexpos(1), "name of variable can not same as system variables")
     # register variable in parser, and it will help us detect undefine error early
     variables: dict = p.parser.variables
     p[0] = AssignStatement(p[1], p[2], p[3], p.lineno(1), p.lineno(4), p.lexpos(1), p.lexpos(4))
@@ -121,7 +124,7 @@ def p_expr_variable(p: YaccProduction):
     # Get the the table of variable from parser
     variables: dict = p.parser.variables
     # If the variable has not been defined, raise error
-    if p[1] not in variables.keys():
+    if p[1] not in variables.keys() or p[1] not in system_variable:
         raise UndefineError(p[1], p.lineno(1), p.lexpos(1))
     # If the variable has been defined, get variable from table
     p[0] = Variable(variables.get(p[1]), p.lineno(1), p.lineno(1), p.lexpos(1), p.lexpos(1) + len(p[1]) - 1)

@@ -8,7 +8,7 @@ class Editor(Qsci.QsciScintilla):
     def __init__(self, parent=None):
         super(Editor, self).__init__(parent=parent)
         # 默认字体
-        self.font = QtGui.QFont("Monospace", 12)
+        self.font = QtGui.QFont("Monospace", 16)
 
         # 词法解析器
         self.lexer = None
@@ -39,8 +39,8 @@ class Editor(Qsci.QsciScintilla):
 
         # 设置光标
         self.setCaretWidth(2)   # 光标宽度（以像素为单位），0表示不显示光标
-        self.setCaretForegroundColor(QtGui.QColor("darkCyan"))  # 光标颜色
-        self.setCaretLineVisible(True)  # 高亮显示光标所在行
+        self.setCaretForegroundColor(QtGui.QColor("#ff0000ff"))  # 设置光标前景色
+        self.setCaretLineVisible(True)  # 设置是否使用光标所在行背景色
         self.setCaretLineBackgroundColor(QtGui.QColor('#FFCFCF'))  # 光标所在行的底色
 
         # 设置页边，有3种Margin：0-行号; 1-改动标识; 2-代码折叠
@@ -54,14 +54,15 @@ class Editor(Qsci.QsciScintilla):
         # self.setAutoCompletionCaseSensitivity(False)  # 取消自动补全大小写敏感
         # self.setAutoCompletionThreshold(1)  # 输入1个字符，就出现自动补全提示
 
-        # 设置窗口大小
-        self.setFixedSize(1024, 760)
-        # 设置文档窗口的标题
-        self.setWindowTitle("MyEditor")
+        # # 设置窗口大小
+        # self.setFixedSize(1024, 760)
+        # # 设置文档窗口的标题
+        # self.setWindowTitle("MyEditor")
 
     def init_lexer(self):
         # 语法高亮显示
-        self.lexer = Qsci.QsciLexerPascal(self)
+        self.lexer = Lexer(parent=self)
+        self.lexer.setFont(self.font)
         self.setLexer(self.lexer)
 
     def init_signal(self):

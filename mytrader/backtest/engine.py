@@ -5,9 +5,6 @@ from mytrader.mylang.env import BacktestEnvironment
 from mytrader.mylang.error import LexError, ParseError
 from mytrader.backtest.object import Indicator
 
-from mytrader.datasource.jqdata import JQData
-import time
-
 
 ENGINE_NAME = "BacktestEngine"
 
@@ -91,6 +88,7 @@ if __name__ == '__main__':
     # 创建回测引擎
     backtest_engine = BacktestEngine()
     # 创建数据源
+    from mytrader.datasource.jqdata import JQData
     jq = JQData(username="15626487308", password="487308")
     # 获取bars数据
     bars = jq.get_bars(symbol="I2005.XDCE", start="2019-12-1 00:00:00", end="2020-01-01 23:59:59", freq="1d")

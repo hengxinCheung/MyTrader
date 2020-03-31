@@ -1,6 +1,10 @@
 """All built-in functions must contain the argument 'env' (mytrader.mylang.env.Environment),
 which must be at the first position and is automatically injected by the compiler.
-So the user does not need to input the argument. And you can get any data you need from the 'env'."""
+So the user does not need to input the argument. And you can get any data you need from the 'env'.
+Here are some special rule for coding builtin function:
+- first argument must be 'env'
+- arguments of this type '*args, **kwargs' can not be used
+- arguments can not have default value"""
 from mytrader.mylang.env import EnvironmentType, Environment
 
 

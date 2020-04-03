@@ -8,22 +8,17 @@ NAME = "JqData"
 
 
 class JQData(DataSource):
-    def __init__(self, username: str,
-                 password: str,
-                 host: str = "39.107.190.114",
-                 port: int = 7000):
+    def __init__(self, username: str, password: str):
         super(JQData, self).__init__(name=NAME)
         # 账户信息
         self.username = username
         self.password = password
-        self.host = host
-        self.port = port
         # 自动登录
         self.login()
 
     def login(self):
         """登录远程服务器"""
-        auth(self.username, self.password, self.host, self.port)
+        auth(self.username, self.password)
 
     def logout(self):
         """登出远程服务器"""
@@ -68,7 +63,7 @@ class JQData(DataSource):
                 return s
         return None
 
-    @functools.lru_cache(maxsize=4096)
+    @functools.lru_cache()
     def get_bars(self, symbol, start, end, freq):
         """按开始日期、结束日期、频率获取给定期货代码的价格信息"""
         symbol = self.normalize(symbol)
